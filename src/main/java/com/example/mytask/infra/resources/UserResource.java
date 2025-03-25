@@ -1,14 +1,15 @@
 package com.example.mytask.infra.resources;
 
-import com.example.mytask.domain.dto.RequestUserDto;
+import com.example.mytask.domain.dto.CreateUserDto;
+import com.example.mytask.domain.dto.UpdateUserDto;
 import com.example.mytask.domain.entities.User;
-import com.example.mytask.repositories.UserRepository;
 import com.example.mytask.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,25 +19,38 @@ public class UserResource {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody @Validated CreateUserDto data) {
+        var userId = userService.createUser(data);
+        return ResponseEntity.created(URI.create("/users/" + userId)).build();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> findUserById(@PathVariable("userId") Long userId) {
+        var user = userService.findUserById(userId);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.notFound().build();
+    }
 
     @GetMapping
-    public ResponseEntity <List<User>> findAll() {
-        List<User> list = userService.findAll();
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<List<User>> listUsers() {
+        var users = userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
-    public ResponseEntity<User> findById(Long id) {
-        User obj = userService.findById(id);
-        return ResponseEntity.ok().body(obj);
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> updateUserById(@PathVariable("userId") Long userId,
+                                                 @RequestBody UpdateUserDto updateData) {
+
+        userService.updateUserById(userId, updateData);
+        return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
-    public ResponseEntity<User> newUser(@RequestBody @Validated RequestUserDto data) {
-        User user = new User(null, data.name(), data.email(), data.number(), data.username(), data.password(), null);
-        userRepository.save(user);
-        return ResponseEntity.ok().body(user);
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> deleteById(@PathVariable("userId") Long userId) {
+        userService.deleteUserById(userId);
+        return ResponseEntity.noContent().build();
     }
-
 }

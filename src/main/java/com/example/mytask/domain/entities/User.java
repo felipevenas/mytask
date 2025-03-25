@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString(exclude = "tasks")
 public class User implements Serializable {
 
     @Id
