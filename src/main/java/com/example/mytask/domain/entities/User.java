@@ -1,17 +1,21 @@
 package com.example.mytask.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_user")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
+@ToString(exclude = "tasks")
 public class User implements Serializable {
 
     @Id
@@ -23,5 +27,8 @@ public class User implements Serializable {
     private String number;
     private String username;
     private String password;
+
+    @OneToMany(mappedBy = "user") // RELAÇÃO UM PARA MUITOS - UM USER PARA MUITAS TASKs.
+    private List<Task> tasks = new ArrayList<>();
 
 }

@@ -1,5 +1,6 @@
 package com.example.mytask.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,10 @@ public class Task implements Serializable {
     private String title;
     private String description;
     private boolean checkbox;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
