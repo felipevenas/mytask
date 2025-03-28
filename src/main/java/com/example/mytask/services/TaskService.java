@@ -4,6 +4,7 @@ import com.example.mytask.domain.dto.CreateTaskDto;
 import com.example.mytask.domain.dto.UpdateTaskBodyDto;
 import com.example.mytask.domain.dto.UpdateTaskStatusDto;
 import com.example.mytask.domain.entities.Task;
+import com.example.mytask.domain.entities.User;
 import com.example.mytask.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
